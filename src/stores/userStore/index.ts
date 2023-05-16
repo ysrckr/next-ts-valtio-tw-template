@@ -1,9 +1,8 @@
 import { proxy } from 'valtio';
-import { UserState } from './User';
+import { User } from './User';
 
-export const userStore = proxy<UserState>({
-  user: {
-    id: 0,
-    name: '',
-  },
+export const userStore = proxy<User>({
+  id: 0,
+  name: '',
+  password: '',
 });

@@ -8,7 +8,7 @@ import { useSnapshot } from 'valtio';
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const user = useSnapshot(userStore.user);
+  const user = useSnapshot(userStore);
 
   const addUser = async () => {
     const res = await fetch('/api/login', {
@@ -42,7 +42,7 @@ export default function LoginPage() {
         <input
           type="text"
           name="username"
-          onChange={(event: ChangeEvent<HTMLInputElement>) => (userStore.user.name = event.target.value)}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => (userStore.name = event.target.value)}
         />
       </label>
       <label>
@@ -50,7 +50,7 @@ export default function LoginPage() {
         <input
           type="password"
           name="password"
-          onChange={(event: ChangeEvent<HTMLInputElement>) => (userStore.user.password = event.target.value)}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => (userStore.password = event.target.value)}
         />
       </label>
       <button type="submit">Login</button>
