@@ -1,0 +1,1 @@
+export { checkVerified } from './checkVerified';

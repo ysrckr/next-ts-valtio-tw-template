@@ -1,0 +1,25 @@
+{
+  "extends": "next/core-web-vitals",
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "eqeqeq": "error",
+    "no-trailing-spaces": "error",
+    "object-curly-spacing": ["error", "always"],
+    "no-underscore-dangle": 2,
+    "prefer-const": 2,
+    "prefer-destructuring": 2,
+    "no-param-reassign": 2,
+    "no-use-before-define": 2,
+    "no-var": 2,
+    "no-useless-constructor": 2,
+    "no-useless-return": 2,
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "react/jsx-filename-extension": [2, { "extensions": ["tsx"] }],
+    "prefer-arrow-callback": 2,
+    "prettier/prettier": "error"
+  }
+}
