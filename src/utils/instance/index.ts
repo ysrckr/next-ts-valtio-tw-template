@@ -1,9 +1,11 @@
+type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 interface Headers {
   [key: string]: string;
 }
 
 interface Options {
-  headers: Headers;
+  headers?: Headers;
+  body?: any;
   cache?: 'no-store' | 'force-cache';
   next?: {
     revalidate: number;
@@ -12,123 +14,62 @@ interface Options {
 
 export class Instance {
   private baseURL: string;
-  private timeout: number;
   private headers: Headers;
-  constructor(baseURL: string, timeout: number, headers: Headers) {
+  constructor(baseURL: string, headers: Headers) {
     this.baseURL = baseURL;
-    this.timeout = timeout;
     this.headers = headers;
   }
   public static create({
     baseURL = '',
-    timeout = 30000,
     headers = {
       'Content-Type': 'application/json',
     },
   }) {
-    return new Instance(baseURL, timeout, headers);
+    return new Instance(baseURL, headers);
   }
-  get<T>(url: string, options: Options): Promise<T> {
-    return new Promise((resolve, reject) => {
-      fetch(this.baseURL + url, {
-        method: 'GET',
-        ...options,
-      })
-        .then(response => {
-          if (!response.ok) {
-            return reject(response);
-          }
-          return response.json();
-        })
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          reject(error);
+
+  private fetchify(method: Method) {
+    return async <T>(url: string, options?: Options): Promise<T> => {
+      if (options?.headers) {
+        options.headers = {
+          ...this.headers,
+          ...options.headers,
+        };
+      }
+
+      if (options?.body) {
+        options.body = JSON.stringify(options.body);
+      }
+
+      try {
+        const response = await fetch(this.baseURL + url, {
+          method,
+          ...options,
         });
-    });
+        if (!response.ok) {
+          return Promise.reject(response);
+        }
+        const data = await response.json();
+        return Promise.resolve(data);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    };
   }
-  post<T>(url: string, body: string, options: Options): Promise<T> {
-    return new Promise((resolve, reject) => {
-      fetch(this.baseURL + url, {
-        method: 'POST',
-        body,
-        ...options,
-      })
-        .then(response => {
-          if (!response.ok) {
-            return reject(response);
-          }
-          return response.json();
-        })
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+
+  get<T>(url: string, options?: Options): Promise<T> {
+    return this.fetchify('GET')(url, options);
   }
-  put<T>(url: string, body: string, options: Options): Promise<T> {
-    return new Promise((resolve, reject) => {
-      fetch(this.baseURL + url, {
-        method: 'PUT',
-        body,
-        ...options,
-      })
-        .then(response => {
-          if (!response.ok) {
-            return reject(response);
-          }
-          return response.json();
-        })
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+  post<T>(url: string, options: Options): Promise<T> {
+    return this.fetchify('POST')(url, options);
   }
-  patch<T>(url: string, body: string, options: Options): Promise<T> {
-    return new Promise((resolve, reject) => {
-      fetch(this.baseURL + url, {
-        method: 'PATCH',
-        body,
-        ...options,
-      })
-        .then(response => {
-          if (!response.ok) {
-            return reject(response);
-          }
-          return response.json();
-        })
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+  put<T>(url: string, options: Options): Promise<T> {
+    return this.fetchify('PUT')(url, options);
+  }
+  patch<T>(url: string, options: Options): Promise<T> {
+    return this.fetchify('PATCH')(url, options);
   }
   delete<T>(url: string, options: Options): Promise<T> {
-    return new Promise((resolve, reject) => {
-      fetch(this.baseURL + url, {
-        method: 'DELETE',
-        ...options,
-      })
-        .then(response => {
-          if (!response.ok) {
-            return reject(response);
-          }
-          return response.json();
-        })
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+    return this.fetchify('DELETE')(url, options);
   }
 }
