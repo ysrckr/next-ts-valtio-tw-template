@@ -1,15 +1,14 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAppSelector, useAppDispatch } from '@/stores/hooks';
-import { selectUser } from '@/stores/userStore';
+import { userStore } from '@/stores/userStore';
 import type { ChangeEvent, FormEventHandler } from 'react';
+import { useSnapshot } from 'valtio';
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const user = useAppSelector(selectUser);
-  const dispatch = useAppDispatch();
+  const user = useSnapshot(userStore.user);
 
   const addUser = async () => {
     const res = await fetch('/api/login', {
@@ -43,9 +42,7 @@ export default function LoginPage() {
         <input
           type="text"
           name="username"
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            dispatch({ type: 'user/setName', payload: event.target.value })
-          }
+          onChange={(event: ChangeEvent<HTMLInputElement>) => (userStore.user.name = event.target.value)}
         />
       </label>
       <label>
@@ -53,9 +50,7 @@ export default function LoginPage() {
         <input
           type="password"
           name="password"
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            dispatch({ type: 'user/setPassword', payload: event.target.value })
-          }
+          onChange={(event: ChangeEvent<HTMLInputElement>) => (userStore.user.password = event.target.value)}
         />
       </label>
       <button type="submit">Login</button>
