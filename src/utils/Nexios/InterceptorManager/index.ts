@@ -1,41 +1,46 @@
-type Resolve = () => void;
-type Reject = () => void;
-type InterceptorId = number;
-type Handler = {
-  fulfilled: Resolve;
-  rejected: Reject;
+type Interceptor = {
+  request?: (config: any[]) => any;
+  requestError?: (error: any) => any;
+  response?: (response: any) => any;
+  responseError?: (error: any) => any;
 };
-type HandlerCallback = (handler: Handler) => void;
-export class InterceptorManager {
-  public handlers: Handler[];
 
-  constructor() {
-    this.handlers = [];
-  }
-  use(fulfilled: Resolve, rejected: Reject): InterceptorId {
-    this.handlers.push({
-      fulfilled,
-      rejected,
-    });
-    return this.handlers.length - 1;
-  }
-  eject(id: InterceptorId) {
-    if (this.handlers[id]) {
-      this.handlers = this.handlers.filter((_, index) => index !== id);
-    }
+export class InterceptorManager {
+  public interceptors: Interceptor[];
+  public promise: Promise<any>;
+
+  constructor(promise: Promise<any>) {
+    this.interceptors = [];
+    this.promise = promise;
   }
 
   clear() {
-    if (this.handlers) {
-      this.handlers = [];
+    if (this.interceptors) {
+      this.interceptors = [];
     }
   }
 
-  forEach(fn: HandlerCallback) {
-    this.handlers.forEach(handler => {
-      if (handler !== null) {
-        fn(handler);
+  reverse() {
+    if (this.interceptors) {
+      this.interceptors.reverseFast();
+    }
+
+    return this;
+  }
+
+  forEach() {
+    if (this.interceptors) {
+      if (this.interceptors.length) {
+        this.interceptors.forEach(interceptor => {
+          if (interceptor?.request || interceptor?.requestError) {
+            const { request, requestError } = interceptor;
+            this.promise = this.promise.then((...args) => request?.apply(this, ...args), requestError);
+          } else if (interceptor?.response || interceptor?.responseError) {
+            const { response, responseError } = interceptor;
+            this.promise = this.promise.then((...args) => response?.apply(this, ...args), responseError);
+          }
+        });
       }
-    });
+    }
   }
 }

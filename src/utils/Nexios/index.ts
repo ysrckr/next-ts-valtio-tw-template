@@ -1,3 +1,5 @@
+import { InterceptorManager } from './InterceptorManager';
+
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 interface Headers {
   [key: string]: string;
@@ -78,5 +80,21 @@ export class Nexios {
   }
   delete<T>(url: string, options: Options): Promise<T> {
     return this.fetchify('DELETE')(url, options);
+  }
+
+  interceptor(fetch: any, ...args: any[]) {
+    const interceptors = new InterceptorManager(Promise.resolve(args));
+    const reversedInterceptors = interceptors.reverse();
+
+    // Register request interceptors
+    reversedInterceptors.forEach();
+
+    // Register fetch
+    interceptors.promise = interceptors.promise.then(fetch);
+
+    // Register response interceptors
+    reversedInterceptors.forEach();
+
+    return interceptors.promise;
   }
 }
