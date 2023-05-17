@@ -69,7 +69,7 @@ export class Nexios {
   get<T>(url: string, options?: Options): Promise<T> {
     return this.fetchify('GET')(url, options);
   }
-  post<T, K>(url: string, body: K, options: Options): Promise<T> {
+  post<T, K>(url: string, body: K, options?: Options): Promise<T> {
     return this.fetchify('POST')(url, body, options);
   }
   put<T, K>(url: string, body: K, options: Options): Promise<T> {

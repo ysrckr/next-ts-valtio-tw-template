@@ -3,6 +3,6 @@ import { User } from './User';
 
 export const userStore = proxy<User>({
   id: 0,
-  name: '',
+  name: 'admin',
   password: '',
 });

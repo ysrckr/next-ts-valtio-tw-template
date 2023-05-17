@@ -4,18 +4,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { userStore } from '@/stores/userStore';
 import type { ChangeEvent, FormEventHandler } from 'react';
 import { useSnapshot } from 'valtio';
+import { Nexios } from '@/utils/Nexios';
 
 export default function LoginPage() {
+  const Nexioss = Nexios.create({ baseURL: 'http://localhost:3000/api' });
   const router = useRouter();
   const searchParams = useSearchParams();
-  const user = useSnapshot(userStore);
+  const user = useSnapshot(userStore, { sync: true });
 
   const addUser = async () => {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      body: JSON.stringify(user),
+    const res = await Nexioss.post('/login', {
+      user: user?.name,
+      password: user?.password,
     });
-    const { success } = await res.json();
+    const { success } = await res;
 
     if (success) {
       const nextUrl = searchParams.get('next');
@@ -38,11 +40,15 @@ export default function LoginPage() {
     <form onSubmit={handleSubmit}>
       {user?.name && <div>{user.name} from redux</div>}
       <label>
-        Username:
+        Name:
         <input
           type="text"
-          name="username"
-          onChange={(event: ChangeEvent<HTMLInputElement>) => (userStore.name = event.target.value)}
+          name="name"
+          autoComplete="off"
+          defaultValue={user.name}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            userStore.name = event.target.value;
+          }}
         />
       </label>
       <label>
@@ -50,7 +56,11 @@ export default function LoginPage() {
         <input
           type="password"
           name="password"
-          onChange={(event: ChangeEvent<HTMLInputElement>) => (userStore.password = event.target.value)}
+          autoComplete="off"
+          defaultValue={user.password}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            userStore.password = event.target.value;
+          }}
         />
       </label>
       <button type="submit">Login</button>

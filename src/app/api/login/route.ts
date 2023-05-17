@@ -6,9 +6,9 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
 
   // Make that below if condition as your own backend api call to validate user
-  if (body.username === 'admin' && body.password === 'admin') {
+  if (body.user === 'admin' && body.password === 'admin') {
     const token = await new SignJWT({
-      username: body.username,
+      user: body.user,
       role: 'admin', // Set your own roles
     })
       .setProtectedHeader({ alg: 'HS256' })
