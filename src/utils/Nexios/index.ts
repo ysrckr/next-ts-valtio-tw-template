@@ -12,7 +12,7 @@ interface Options {
   };
 }
 
-export class Instance {
+export class Nexios {
   private baseURL: string;
   private headers: Headers;
   constructor(baseURL: string, headers: Headers) {
