@@ -5,11 +5,15 @@ interface Headers {
 
 interface Options {
   headers?: Headers;
-  body?: any;
   cache?: 'no-store' | 'force-cache';
   next?: {
     revalidate: number;
   };
+}
+
+interface FetchOptions extends Options {
+  method: Method;
+  body?: string;
 }
 
 export class Nexios {
@@ -29,7 +33,7 @@ export class Nexios {
   }
 
   private fetchify(method: Method) {
-    return async <T>(url: string, options?: Options): Promise<T> => {
+    return async <T, K>(url: string, body?: K, options?: Options): Promise<T> => {
       if (options?.headers) {
         options.headers = {
           ...this.headers,
@@ -37,15 +41,18 @@ export class Nexios {
         };
       }
 
-      if (options?.body) {
-        options.body = JSON.stringify(options.body);
+      const fetchOptions: FetchOptions = {
+        method,
+        body: JSON.stringify(body),
+        ...options,
+      };
+
+      if (method === 'GET' || method === 'DELETE') {
+        delete fetchOptions.body;
       }
 
       try {
-        const response = await fetch(this.baseURL + url, {
-          method,
-          ...options,
-        });
+        const response = await fetch(this.baseURL + url, fetchOptions);
         if (!response.ok) {
           return Promise.reject(response);
         }
@@ -60,14 +67,14 @@ export class Nexios {
   get<T>(url: string, options?: Options): Promise<T> {
     return this.fetchify('GET')(url, options);
   }
-  post<T>(url: string, options: Options): Promise<T> {
-    return this.fetchify('POST')(url, options);
+  post<T, K>(url: string, body: K, options: Options): Promise<T> {
+    return this.fetchify('POST')(url, body, options);
   }
-  put<T>(url: string, options: Options): Promise<T> {
-    return this.fetchify('PUT')(url, options);
+  put<T, K>(url: string, body: K, options: Options): Promise<T> {
+    return this.fetchify('PUT')(url, body, options);
   }
-  patch<T>(url: string, options: Options): Promise<T> {
-    return this.fetchify('PATCH')(url, options);
+  patch<T, K>(url: string, body: K, options: Options): Promise<T> {
+    return this.fetchify('PATCH')(url, body, options);
   }
   delete<T>(url: string, options: Options): Promise<T> {
     return this.fetchify('DELETE')(url, options);
