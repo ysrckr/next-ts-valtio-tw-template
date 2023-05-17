@@ -1,5 +1,5 @@
 import { test, describe, expect } from 'vitest';
-import 'index.d.ts';
+import 'array.d.ts';
 describe('reverseFast', () => {
   test('should reverse an array of numbers', () => {
     const arr = [1, 2, 3, 4, 5];
