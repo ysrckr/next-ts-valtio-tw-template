@@ -16,9 +16,9 @@
     "no-var": 2,
     "no-useless-return": 2,
     "arrow-spacing": ["error", { "before": true, "after": true }],
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "react/jsx-filename-extension": [2, { "extensions": ["tsx"] }],
     "prefer-arrow-callback": 2,
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "@typescript-eslint/no-unused-vars": ["error"]
   }
 }
