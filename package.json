@@ -14,11 +14,10 @@
     "lint-ts-fix": "npx eslint --fix --ext .ts,.tsx",
     "lint-fix": "pnpm run lint:css:fix && pnpm run lint:ts:fix",
     "format-lint": "pnpm run format && pnpm run lint:fix",
+    "test": "vitest",
     "prepare": "husky install"
   },
   "dependencies": {
-    "@types/node": "20.1.5",
-    "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
     "autoprefixer": "10.4.14",
     "eslint": "8.40.0",
@@ -35,14 +34,20 @@
     "valtio": "^1.10.5"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.0.0",
+    "@types/node": "20.1.5",
+    "@types/react": "18.2.6",
     "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@vitejs/plugin-react": "^4.0.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",
+    "jsdom": "^22.0.0",
     "prettier": "^2.8.8",
     "stylelint": "^15.6.1",
     "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-standard": "^33.0.0",
     "stylelint-config-tailwindcss": "^0.0.7",
-    "stylelint-prettier": "^3.0.0"
+    "stylelint-prettier": "^3.0.0",
+    "vitest": "^0.31.0"
   }
 }

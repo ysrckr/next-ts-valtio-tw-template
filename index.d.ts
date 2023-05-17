@@ -1,10 +1,10 @@
 declare global {
   interface Array<T> {
-    swapArray(): Array<T>;
+    reverseFast(): Array<T>;
   }
 }
 
-Array.prototype.swapArray = function () {
+Array.prototype.reverseFast = function () {
   let left = 0;
   let right = 0;
   const { length } = this;
