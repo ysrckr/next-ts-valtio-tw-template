@@ -25,7 +25,7 @@ export class Nexios {
       'Content-Type': 'application/json',
     },
   }) {
-    return new Instance(baseURL, headers);
+    return new Nexios(baseURL, headers);
   }
 
   private fetchify(method: Method) {
