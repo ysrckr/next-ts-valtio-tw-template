@@ -15,7 +15,7 @@
     "lint-fix": "pnpm run lint:css:fix && pnpm run lint:ts:fix",
     "format-lint": "pnpm run format && pnpm run lint:fix",
     "test": "vitest",
-    "pretest": "vitest -- --watchAll=false",
+    "prepush": "vitest run",
     "prepare": "husky install"
   },
   "dependencies": {

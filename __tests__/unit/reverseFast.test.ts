@@ -23,9 +23,9 @@ describe('reverseFast', () => {
   });
 
   test('should reverse an array of arrays', () => {
-    const arr = [[1], [2], [3], [4], [5]];
+    const arr = [[1], [2], [3], [4], [5], [6]];
     const reversed = arr.reverseFast();
 
-    expect(reversed).toEqual([[5], [4], [3], [2], [1]]);
+    expect(reversed).toEqual([[6], [5], [4], [3], [2], [1]]);
   });
 });

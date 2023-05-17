@@ -9,7 +9,7 @@
 .stylelintrc
 .stylelintignore
 
-
+__tests__/*
 # dependencies
 /node_modules
 /.pnp
