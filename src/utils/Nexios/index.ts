@@ -17,19 +17,19 @@ interface FetchOptions extends Options {
 }
 
 export class Nexios {
-  private baseURL: string;
-  private headers: Headers;
-  constructor(baseURL: string, headers: Headers) {
+  private baseURL: string = '';
+  private headers: Headers = {
+    'Content-Type': 'application/json',
+  };
+  private withCredentials: boolean = false;
+
+  constructor(baseURL: string, headers: Headers, withCredentials: boolean) {
     this.baseURL = baseURL;
     this.headers = headers;
+    this.withCredentials = withCredentials;
   }
-  public static create({
-    baseURL = '',
-    headers = {
-      'Content-Type': 'application/json',
-    },
-  }) {
-    return new Nexios(baseURL, headers);
+  public static create({ baseURL, headers, withCredentials }: Nexios) {
+    return new Nexios(baseURL, headers, withCredentials);
   }
 
   private fetchify(method: Method) {
