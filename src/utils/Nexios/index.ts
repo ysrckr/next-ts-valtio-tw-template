@@ -18,19 +18,25 @@ interface FetchOptions extends Options {
   body?: string;
 }
 
+interface NexiosConstructor {
+  baseURL: string;
+  headers?: Headers;
+  withCredentials?: boolean;
+}
+
 export class Nexios {
   private baseURL: string = '';
-  private headers: Headers = {
+  private headers?: Headers = {
     'Content-Type': 'application/json',
   };
-  private withCredentials: boolean = false;
+  private withCredentials?: boolean = false;
 
-  constructor(baseURL: string, headers: Headers, withCredentials: boolean) {
+  constructor(baseURL: string, headers: Headers | undefined, withCredentials: boolean | undefined) {
     this.baseURL = baseURL;
     this.headers = headers;
     this.withCredentials = withCredentials;
   }
-  public static create({ baseURL, headers, withCredentials }: Nexios) {
+  public static create({ baseURL, headers, withCredentials }: NexiosConstructor) {
     return new Nexios(baseURL, headers, withCredentials);
   }
 

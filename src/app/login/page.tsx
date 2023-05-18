@@ -17,9 +17,9 @@ export default function LoginPage() {
       user: user?.name,
       password: user?.password,
     });
-    const { success } = await res;
+    const data = await res;
 
-    if (success) {
+    if (data) {
       const nextUrl = searchParams.get('next');
       // @see: https://github.com/vercel/next.js/discussions/44149
       router.push(nextUrl ?? '/');
